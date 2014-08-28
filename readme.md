@@ -6,7 +6,7 @@ you're looking to write scripts against your Trello account, this may be a good 
 
 I chose Python as a starting point because it's quite simple to read without getting lost in 
 formatting HTTP connections and parsing responses. We let the 
-[[`requests`]](http://docs.python-requests.org/) library do most of the heavy lifting so we can
+[`requests`](http://docs.python-requests.org/) library do most of the heavy lifting so we can
 focus on writing procedural code.
 
 ## How this works

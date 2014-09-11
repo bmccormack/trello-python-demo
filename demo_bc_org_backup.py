@@ -101,12 +101,10 @@ while not complete:
 
   time.sleep(poll_interval)
 
-print download_url
-
 
 
 #now we're going to make a request for the actual downloaded file and write it to out_file
-response = requests.get(download_url, stream=True)
+response = requests.get(download_url, params=params_key_and_token, stream=True)
 if not response.ok:
   print 'something went wrong'
   response.raise_for_status()

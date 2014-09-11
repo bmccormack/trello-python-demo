@@ -101,8 +101,16 @@ while not complete:
 
   time.sleep(poll_interval)
 
+print download_url
+
+
+
 #now we're going to make a request for the actual downloaded file and write it to out_file
 response = requests.get(download_url, stream=True)
+if not response.ok:
+  print 'something went wrong'
+  response.raise_for_status()
+
 with open(out_file, 'wb') as f:
   for chunk in response.iter_content(chunk_size=1024):
     if chunk:

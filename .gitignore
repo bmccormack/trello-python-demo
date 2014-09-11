@@ -1,3 +1,5 @@
 settings.py
 settings.pyc
 *.pyc
+out/*
+.DS_Store

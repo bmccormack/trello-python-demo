@@ -6,7 +6,9 @@
 # This demo file will show you how to use an undocumented feature of the Trello API
 # to automate backing up your organization's data
 #
-
+# NOTE: You'll need to make sure you get a read,write token for the API Export. Because the
+#       Business Class export writes a copy of the backup to your organization, you need
+#       write permissions and not just read permissions.
 
 import requests
 import json
@@ -72,7 +74,7 @@ args = {'attachments': str(download_attachments).lower(), 'attachment_age': atta
 response = requests.get(url, params=params_key_and_token, data=args)
 
 if response.status_code != 200:
-  print 'We did not get a token back. Maybe a problem with your id_organization or maybe you have not upgraded to Business Class?'
+  print 'We did not get a token back. There may be a problem with id_organization or maybe you have not upgraded to Business Class. Also, make sure you requested a token with scope=read,write.'
   response.raise_for_status()
   sys.exit()
 

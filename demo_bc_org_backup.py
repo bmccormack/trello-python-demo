@@ -69,16 +69,16 @@ base = 'https://trello.com/1/'
 ### Request a backup and get a token ###################################
 #
 #
-url = '%sorganizations/%s/export' % (base, id_organization)
+url = '%sorganizations/%s/exports' % (base, id_organization)
 args = {'attachments': str(download_attachments).lower(), 'attachment_age': attachment_age}
-response = requests.get(url, params=params_key_and_token, data=args)
+response = requests.post(url, params=params_key_and_token, data=args)
 
 if response.status_code != 200:
   print 'We did not get a token back. There may be a problem with id_organization or maybe you have not upgraded to Business Class. Also, make sure you requested a token with scope=read,write.'
   response.raise_for_status()
   sys.exit()
 
-export_token = response.json()['token']
+id_export = response.json()['id']
 
 #Now that we have an export token, we'll periodically check to see if it's available
 
@@ -86,12 +86,12 @@ complete = False
 download_url = ''
 
 while not complete:
-  url = '%sorganizations/%s/export/%s/status' % (base, id_organization, export_token)
+  url = '%sorganizations/%s/exports/%s' % (base, id_organization, id_export)
   response = requests.get(url, params=params_key_and_token)
   response_dict = response.json()
   #we should eventually get back a URL in 'complete'
-  if response_dict['complete']:
-    download_url = 'https://trello.com%s' % response_dict['complete']
+  if response_dict['status']['stage'] == 'Export complete':
+    download_url = '%sorganizations/%s/exports/%s/download' % (base, id_organization, id_export)
     break
 
   has_progress = 'progress' in response_dict['status'] and 'total' in response_dict['status']

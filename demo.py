@@ -136,6 +136,10 @@ response = requests.get(boards_url, params=params_key_and_token, data=arguments)
 # easy for us. We're able to work in native python dictionaries and requests is automatically
 # form-encoding our 'arguments' dictionary when the request is made. This is quite handy
 # and lets us get right to working with the Trello API.
+#
+# If you're making your own script, you might check out query_trello in 
+# trello_helper.py, which wraps up the last few lines of code in a repeatable 
+# fashion.
 
 # Since we're using requests, there's a json() method for decoding the response. If you're not using 
 # requests or are using a different language, you may need to use your favorite JSON library to deserialize

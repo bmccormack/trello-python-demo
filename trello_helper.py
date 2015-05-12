@@ -5,7 +5,7 @@ import json
 
 def query_trello(method, url, data=None):
   BASE_URL = 'https://trello.com/1/'
-  params_key_and_token = {'key':TRELLO_KEY,'token':TRELLO_TOKEN}
+  params_key_and_token = {'key':trello_key,'token':trello_token}
   url = BASE_URL + url
   s = Session()
   req = Request(method, url,

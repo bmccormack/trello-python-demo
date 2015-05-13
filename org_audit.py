@@ -3,6 +3,7 @@
 
 from trello_helper import query_trello
 from util import jprint
+from texttable import Texttable
 import sys
 
 id_org = '4e387d48d875071b270040e8'
@@ -59,6 +60,30 @@ def add_board_member_to_member_list(board_membership, board, member_list):
     member_list.append(member)    
 
 
+def get_member_list_sorted(member_list):
+  return sorted(member_list, key = lambda m :(-m["org_member"], m["org_deactivated"], m["unconfirmed"], m["org_member_type"], m["fullName"]))
+
+def print_members_list_texttable(member_list):
+  sorted_member_list = get_member_list_sorted(member_list)
+
+  table = Texttable()
+  #table.set_deco(Texttable.HEADER)
+  table.header(["org member type", "full name", "username", "org deactivated", "unconfirmed", "# boards accessible", "# boards deactivated"])
+  table.set_cols_width([10, 30, 30, 15, 11, 10, 11])
+
+  for m in sorted_member_list:
+    table.add_row([m["org_member_type"], 
+                 m["fullName"], 
+                 m["username"], 
+                 "True" if m["org_deactivated"] else "False", 
+                 "True" if m["unconfirmed"] else "False", 
+                 len([b for b in m["boards_with_membership_info"] if not b["board_deactivated"]]),
+                 len([b for b in m["boards_with_membership_info"] if b["board_deactivated"]])])
+
+  print table.draw()
+
+# org member type, full name, username, org deactivated, unconfirmed, # boards visible, # boards deactivated
+
 org_memberships = get_org_memberships(id_org)
 org_memberships_normal_and_admin = get_org_members_normal_and_admin(org_memberships)
 get_org_memberships_deactivated = get_org_members_deactivated(org_memberships)
@@ -77,7 +102,7 @@ for board in org_boards:
   # add the deactivated members to a dictionary of external members
 
 
-jprint(member_list)
+print_members_list_texttable(member_list)
 sys.exit()
 
 
@@ -86,7 +111,7 @@ sys.exit()
 # Deactivated Members
 # Non-org members
 # Somewhere down here we want to print out who has access to what, in a top-level way, e.g.:
-# Name, username, unconfirmed, deactivated, number of boards visible, number of boards deactivated
+# Name, username, org member type, unconfirmed, deactivated, number of boards visible, number of boards deactivated
 #
 # and then after that, a full break down by user
 # Name, username, unconfirmed, deactivated
